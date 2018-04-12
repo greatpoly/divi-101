@@ -76,10 +76,18 @@ function divi101_add_top_level_menu() {
 		'Welcome to Divi 101',
 		'Divi 101',
 		'manage_options',
-		'divi101',
+		'divi101_welcome',
 		'divi101_display_settings_page',
 		'dashicons-tickets',
 		null
+	);
+	add_submenu_page(
+		'divi101',
+		'Divi Registration',
+		'Divi Registration',
+		'manage_options',
+		'divi101_welcome',
+		'divi101_display_inner_pages'
 	);
 }
 
@@ -137,15 +145,13 @@ function divi101_display_inner_pages() {
 	<?php
 }
 
-function divi101_add_sublevel_menu (){
-	add_submenu_page (
-		'divi101',
-		'Divi Registration',
-		'Divi Registration',
-		'manage_options',
-		'divi_registration',
-		'divi101_display_inner_pages'
-	);
-}
+//function divi101_add_sublevel_menu (){
+//
+//}
 
-add_action('admin_menu', 'divi101_add_sublevel_menu');
+//add_action('admin_menu', 'divi101_add_sublevel_menu');
+
+
+
+
+}
