@@ -1,0 +1,8 @@
+
+.one_by_three_col {
+    width: 30%;
+    max-width: 390px;
+    display:inline-block;
+    padding-right: 30px;
+    vertical-align: top;
+}
