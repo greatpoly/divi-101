@@ -114,7 +114,7 @@ function divi101_option_tabs() {
 		'divi101_welcome_section',
 		'', // Already title given by callback function
 		'divi101_welcome_callback_function',
-		'divi101_welcome_settings_page' // A custom settings page for welcome section
+		'divi101_welcome_page' // A custom settings page for welcome section
 	);
 
 	// No need to add fields in welcome section, only paragraphs there
@@ -124,7 +124,7 @@ function divi101_option_tabs() {
 		'divi101_registration_section',
 		'Essentials Header Options',
 		'divi01_registration_callback_function',
-		'divi101_registration_settings_page'// A custom settings page for registration section
+		'divi101_registration_page'// A custom settings page for registration section
 	);
 
 	/* Registration section fields */
@@ -132,7 +132,7 @@ function divi101_option_tabs() {
 		'divi101_registration_section_field',
 		'Registration field',
 		'divi101_registration_field_function',
-		'divi101_registration_settings_page', // Need to be same as it's section's page
+		'divi101_registration_page', // Need to be same as it's section's page
 		'divi101_registration_section',
 		array(
 			'header_type'
@@ -144,7 +144,7 @@ function divi101_option_tabs() {
 		'divi101_search_section',
 		'Divi 101 search section',
 		'divi101_search_callback_function',
-		'divi101_search_settings_page' // A custom settings page for search section
+		'divi101_search_page' // A custom settings page for search section
 	);
 
 	/* Search section fields */
@@ -152,35 +152,53 @@ function divi101_option_tabs() {
 		'divi101_search_section_field',
 		'Search field',
 		'divi101_search_field_function',
-		'divi101_search_settings_page', // Need to be same as it's section's page
+		'divi101_search_page', // Need to be same as it's section's page
 		'divi101_search_section',
 		array(
 			'header_type'
 		)
 	);
 
-	//Recent options section
+	// Recent options section
 	add_settings_section(
 		'divi101_recent_section',
 		'Divi 101 recent section',
 		'divi101_recent_callback_function',
-		'divi101_recent_settings_page'
+		'divi101_recent_page'
 	);
 
-	//Recent section fields
+	// Recent section fields
 	add_settings_field(
 		'divi101_recent_section_field',
 		'Recent Field',
 		'divi101_recent_field_function',
-		'divi101_recent_settings_page',
+		'divi101_recent_page',
 		'divi101_recent_section'
 	);
 
+	// Settings options section
+	add_settings_section(
+		'divi101_settings_section',
+		'Divi 101 settings section',
+		'divi101_settings_callback_function',
+		'divi101_settings_page'
+	);
 
-	register_setting( 'divi101_welcome_settings_page', 'divi101_welcome_settings_page' );
-	register_setting( 'divi101_registration_settings_page', 'divi101_registration_settings_page' );
-	register_setting( 'divi101_search_settings_page', 'divi101_registration_settings_page' );
-	register_setting( 'divi101_recent_settings_page', 'divi101_recent_settings_page' );
+	// Settings section fields
+	add_settings_field(
+		'divi101_recent_section_field',
+		'Divi 101 settings field',
+		'divi101_settings_field_function',
+		'divi101_settings_page',
+		'divi101_settings_section'
+	);
+
+
+	register_setting( 'divi101_welcome_page', 'divi101_welcome_page' );
+	register_setting( 'divi101_registration_page', 'divi101_registration_page' );
+	register_setting( 'divi101_search_page', 'divi101_registration_page' );
+	register_setting( 'divi101_recent_page', 'divi101_recent_page' );
+	register_setting( 'divi101_settings_page', 'divi101_settings_page' );
 
 }
 
@@ -207,11 +225,18 @@ function divi_custom_menu_icon() {
         background: url("' . plugins_url( 'admin/images/divi_101_icon_w.png', __FILE__ ) . '") no-repeat center;
 
     }
+    .wp-has-current-submenu .dashicons-tickets {
+        background: url("' . plugins_url( 'admin/images/divi_101_icon_w.png', __FILE__ ) . '") no-repeat center;
+    }
+    
+    .wp-has-current-submenu:hover .dashicons-tickets {
+        background: url("' . plugins_url( 'admin/images/divi_101_icon_w.png', __FILE__ ) . '") no-repeat center;
+    }
     </style>
 ';
 }
 
-/* Call Backs
+/* Call Backs for add_settings_section and add_settings_field
 -----------------------------------------------------------------*/
 function divi101_welcome_callback_function() {
 	?>
@@ -241,12 +266,11 @@ function divi01_registration_callback_function() {
 	echo '<p>Header Display Options:</p>';
 }
 
-function divi101_registration_field_function( $args ) {
+function divi101_registration_field_function($args) {
 
-	$options = get_option( 'divi101_registration_settings_page' );
+	$options = get_option( 'divi101_registration_page' );
 
-	echo '<input type="text" id="' . $args[0] . '" name="divi101_registration_settings_page[' . $args[0] . ']" value="' . $options[ '' . $args[0] . '' ] . '"></input>';
-
+	echo '<input type="text" id="' . $args[0] . '" name="divi101_registration_page[' . $args[0] . ']" value="' . $options[ '' . $args[0] . '' ] . '" />';
 }
 
 function divi101_search_callback_function() {
@@ -255,6 +279,19 @@ function divi101_search_callback_function() {
 
 function divi101_search_field_function() {
 	// todo make search field function
+}
+
+function divi101_recent_callback_function(){
+    // todo
+}
+function divi101_recent_field_function(){
+    // todo
+}
+function divi101_settings_callback_function(){
+    // todo
+}
+function divi101_settings_field_function(){
+    // todo
 }
 
 /* Display Page
@@ -293,27 +330,45 @@ function divi101_tabs_and_fields() {
 		<?php
 		if ( $active_tab == 'divi101' ) {
 			//To display the hidden fields and handle security
-			settings_fields( 'divi101_welcome_settings_page' );
+			settings_fields( 'divi101_welcome_page' );
 
 			//To display the sections assigned to the page
-			do_settings_sections( 'divi101_welcome_settings_page' );
+			do_settings_sections( 'divi101_welcome_page' );
 
 		} else if ( $active_tab == 'divi101_registration' ) {
 			//To display the hidden fields and handle security
-			settings_fields( 'divi101_registration_settings_page' );
+			settings_fields( 'divi101_registration_page' );
 
 
 			//To display the sections assigned to the page
-			do_settings_sections( 'divi101_registration_settings_page' );
+			do_settings_sections( 'divi101_registration_page' );
 
 		} else if ( $active_tab == 'divi101_search' ) {
-			//todo add fields for search tab
+			//To display the hidden fields and handle security
+			settings_fields( 'divi101_search_page' );
+
+
+			//To display the sections assigned to the page
+			do_settings_sections( 'divi101_search_page' );
+
 
 		} else if ( $active_tab == 'divi101_recent' ) {
-			//todo add fields for recent tab
+			//To display the hidden fields and handle security
+			settings_fields( 'divi101_recent_page' );
+
+
+			//To display the sections assigned to the page
+			do_settings_sections( 'divi101_recent_page' );
+
 
 		} else if ( $active_tab == 'divi101_settings' ) {
-			//todo
+			//To display the hidden fields and handle security
+			settings_fields( 'divi101_settings_page' );
+
+
+			//To display the sections assigned to the page
+			do_settings_sections( 'divi101_settings_page' );
+
 
 		}
 		?>
